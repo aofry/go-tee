@@ -1,8 +1,14 @@
 package main
 
-import "github.com/aofry/go-tee/proxy"
+import (
+	"fmt"
+	"github.com/aofry/go-tee/proxy"
+)
 
-func main()  {
+func main() {
+	fmt.Println("Starting")
 
 	proxy.New()
+
+	fmt.Println("Ending")
 }
