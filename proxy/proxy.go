@@ -4,7 +4,6 @@ import (
 	"os"
 	"fmt"
 	"github.com/vulcand/oxy/forward"
-	"github.com/vulcand/oxy/buffer"
 	"github.com/vulcand/oxy/testutils"
 	"net/http"
 	"time"

@@ -1,7 +1,8 @@
 language: go
 
 go:
-  - tip
+  - 1.6
+  - 1.7.x
 
 services:
   - docker
@@ -11,6 +12,6 @@ install:
   - go get github.com/vulcand/oxy/testutils
 
 script:
-  - go test -v ./...
+  - go test github.com/aofry/go-tee
 
 
