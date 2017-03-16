@@ -7,7 +7,8 @@ services:
   - docker
 
 before_install:
-  - go get github.com/vulcand/oxy
+  - go get github.com/vulcand/oxy/forward
+  - go get github.com/vulcand/oxy/testutils
 
 script:
   - go test -v ./...
