@@ -7,11 +7,12 @@ go:
 services:
   - docker
 
-install:
+before_install:
   - go get github.com/vulcand/oxy/forward
   - go get github.com/vulcand/oxy/testutils
 
+
 script:
   - go test github.com/aofry/go-tee
-
+  - docker build -t aofry/go-tee .
 
