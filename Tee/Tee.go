@@ -1,10 +1,9 @@
 package proxy
 
 import (
-	"net/http"
 	"github.com/vulcand/oxy/utils"
 	"io"
-	"time"
+	"net/http"
 )
 
 type Tee struct {

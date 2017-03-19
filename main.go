@@ -1,14 +1,16 @@
 package main
 
 import (
-	"fmt"
+	log "github.com/Sirupsen/logrus"
 	"github.com/aofry/go-tee/proxy"
 )
 
 func main() {
-	fmt.Println("Starting")
+	log.SetLevel(log.InfoLevel)
+
+	log.Println("Starting")
 
 	proxy.New()
 
-	fmt.Println("Ending")
+	log.Println("Ending")
 }

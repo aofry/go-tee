@@ -1,12 +1,11 @@
 package proxy
 
 import (
-	"os"
-	"fmt"
 	"github.com/vulcand/oxy/forward"
 	"github.com/vulcand/oxy/testutils"
 	"net/http"
-	"time"
+	"os"
+	//	log "github.com/Sirupsen/logrus"
 )
 
 func New() {
@@ -26,11 +25,9 @@ func New() {
 	s.ListenAndServe()
 }
 
-func ProxyHandler (w http.ResponseWriter, req *http.Request) {
-	service := os.Getenv("SERVICE")
+func ProxyHandler(w http.ResponseWriter, req *http.Request) {
+	service := os.Getenv("REAL_BACKEND")
 
-	now := time.Now()
-	fmt.Println(now, "Got a request ")
 	// let us forward this request to another server
 	req.URL = testutils.ParseURI(service)
 
