@@ -1,8 +1,8 @@
 backend:
     image: clue/json-server
-    container_name: clue/json-server
+    container_name: backend
     volumes:
-            - ./mock/mock.json:/data/db
+            - ./mock/mock.json:/data/db.json
     ports:
             - 9094:80
 tee:
@@ -15,9 +15,7 @@ tee:
     ports:
         - 8080:8080
 debug-backend:
-    image: clue/json-server
-    container_name: clue/json-server
-    volumes:
-            - ./mock/mock.json:/data/db
+    image: jihchi/alpine-iojs-echo-server
+    container_name: debug
     ports:
-            - 9094:80
+            - 9095:80
