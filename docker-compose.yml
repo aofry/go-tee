@@ -1,0 +1,19 @@
+backend:
+    image: clue/json-server
+    container_name: clue/json-server
+    volumes:
+            - ./mock/mock.json:/data/db
+    ports:
+            - 9094:80
+tee:
+    container_name: go-tee
+    build: ./
+    links:
+        - backend
+debug-backend:
+    image: clue/json-server
+    container_name: clue/json-server
+    volumes:
+            - ./mock/mock.json:/data/db
+    ports:
+            - 9094:80
