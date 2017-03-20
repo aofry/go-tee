@@ -1,6 +1,7 @@
 package proxy
 
 import (
+	goTee "github.com/aofry/go-tee/tee"
 	"github.com/vulcand/oxy/forward"
 	"github.com/vulcand/oxy/testutils"
 	"net/http"
@@ -15,12 +16,13 @@ func New() {
 		proxyPort = "8080"
 	}
 
-	redirect := http.HandlerFunc(ProxyHandler)
+	proxy := http.HandlerFunc(ProxyHandler)
+	teeHandler, _ := goTee.New(proxy)
 
 	// that's it! our reverse proxy is ready!
 	s := &http.Server{
 		Addr:    (":" + proxyPort),
-		Handler: redirect,
+		Handler: teeHandler,
 	}
 	s.ListenAndServe()
 }
@@ -36,3 +38,7 @@ func ProxyHandler(w http.ResponseWriter, req *http.Request) {
 
 	fwd.ServeHTTP(w, req)
 }
+
+//func TeeHandler(w http.ResponseWriter, req *http.Request) {
+//
+//}
