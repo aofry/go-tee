@@ -13,13 +13,16 @@ type Tee struct {
 	reqHeaders  []string
 	respHeaders []string
 	writer      io.Writer
+	requests    chan *http.Request
 }
 
 type Option func(*Tee) error
 
 func New(next http.Handler, opts ...Option) (*Tee, error) {
+	requestsChan := make(chan *http.Request, 100)
 	t := &Tee{
-		next: next,
+		next:     next,
+		requests: requestsChan,
 	}
 	for _, o := range opts {
 		if err := o(t); err != nil {
@@ -37,5 +40,6 @@ func (t *Tee) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 	log.Info("Now I'm before the real proxy")
 	t.next.ServeHTTP(pw, req)
 	log.Info("Now I'm after the real proxy. ", pw.StatusCode(), " ")
+	//t.requests <- req
 
 }
