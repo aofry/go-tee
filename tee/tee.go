@@ -36,5 +36,6 @@ func (t *Tee) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 	pw := &utils.ProxyWriter{W: w}
 	log.Info("Now I'm before the real proxy")
 	t.next.ServeHTTP(pw, req)
-	log.Info("Now I'm after the real proxy.")
+	log.Info("Now I'm after the real proxy. ", pw.StatusCode(), " ")
+
 }

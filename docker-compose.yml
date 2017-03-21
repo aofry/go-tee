@@ -11,11 +11,11 @@ tee:
     links:
         - backend
     environment:
-        - REAL_BACKEND=backend
+        - REAL_BACKEND=http://backend:80/
     ports:
         - 8080:8080
 debug-backend:
     image: jihchi/alpine-iojs-echo-server
     container_name: debug
     ports:
-            - 9095:80
+        - 9095:80
