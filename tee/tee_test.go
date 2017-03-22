@@ -9,16 +9,28 @@ import (
 	"github.com/vulcand/oxy/testutils"
 	"io/ioutil"
 	"net/http/httptest"
+	"os"
+
 )
 
 //func TestTrace(t *testing.T) { TestingT(t) }
 
-type TraceSuite struct{}
+type TeeSuite struct{
+	generalHandler  http.HandlerFunc
+	server		*httptest.Server
+}
 
-//var _ = Suite(&TraceSuite{})
+//var _ = Suite(&TeeSuite{})
+func TestMain(m *testing.M) {
+	log.SetLevel(log.DebugLevel)
+
+
+	// call flag.Parse() here if TestMain uses flags
+	os.Exit(m.Run())
+}
 
 func TestNextHandlerWorks(t *testing.T) {
-	log.SetLevel(log.DebugLevel)
+
 	//create some handler
 	nextHandler := http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
 		w.Header().Set("Content-Length", "5")
@@ -48,4 +60,8 @@ func TestNextHandlerWorks(t *testing.T) {
 	//res.Body.Read()
 	body, err := ioutil.ReadAll(res.Body)
 	log.Debug(body)
+}
+
+func (ts *TeeSuite) TestCopyRequest(t *testing.T)  {
+	//res, _, err := testutils.MakeRequest(srv.URL+"/db1", testutils.Method("POST"), testutils.Body("123456"))
 }
