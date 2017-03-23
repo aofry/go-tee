@@ -12,6 +12,7 @@ tee:
         - backend
     environment:
         - REAL_BACKEND=http://backend:80/
+        - DEBUG_BACKEND=http://debug-backend:80/
     ports:
         - 8080:8080
 debug-backend:

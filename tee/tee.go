@@ -2,34 +2,39 @@ package proxy
 
 import (
 	log "github.com/Sirupsen/logrus"
+	"github.com/vulcand/oxy/forward"
 	"github.com/vulcand/oxy/utils"
 	"io"
 	"net/http"
-	"github.com/vulcand/oxy/forward"
 	"net/url"
+	"os"
 )
 
 type Tee struct {
-	errHandler  utils.ErrorHandler
-	next        http.Handler
-	reqHeaders  []string
-	respHeaders []string
-	writer      io.Writer
-	requests    chan *http.Request
+	errHandler   utils.ErrorHandler
+	next         http.Handler
+	reqHeaders   []string
+	respHeaders  []string
+	writer       io.Writer
+	requests     chan *http.Request
 	debugForward *forward.Forwarder
-	debugUrl    string
+	debugUrl     string
 }
 
 type Option func(*Tee) error
 
 func New(next http.Handler, opts ...Option) (*Tee, error) {
-	requestsChan := make(chan *http.Request, 100)
+	//TODO add external param for concurrent limit
+	concurrentLimit := 1
+
+	requestsChan := make(chan *http.Request, concurrentLimit)
 	fw, _ := forward.New()
 	//TODO add url for debug backend
 	t := &Tee{
-		next:     next,
-		requests: requestsChan,
+		next:         next,
+		requests:     requestsChan,
 		debugForward: fw,
+		debugUrl:     os.Getenv("DEBUG_BACKEND"),
 	}
 	for _, o := range opts {
 		if err := o(t); err != nil {
@@ -50,20 +55,24 @@ func (t *Tee) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 	log.Info("Now I'm before the real proxy")
 	t.next.ServeHTTP(pw, req)
 	log.Info("Now I'm after the real proxy. ", pw.StatusCode(), " ")
-	t.requests <- req
+
+	//limit the actual requests that are going out
+	if len(t.requests) < cap(t.requests) {
+		t.requests <- req
+	}
 
 	go t.sendDebugRequest()
 }
 
 func (t *Tee) sendDebugRequest() {
-	//request := <-t.requests
+	request := <-t.requests
 
-	//w := DummyResponseWriter {}
+	w := &DummyResponseWriter{}
 	//var pUrl *url.URL = &url.URL{}
 	//pUrl, _ = pUrl.Parse(t.debugUrl)
 	//newRequest := t.copyRequest(request, pUrl)
-	//t.debugForward.ServeHTTP(w, newRequest)
-
+	t.debugForward.ServeHTTP(w, request)
+	log.Info("Sent request to debug backend")
 }
 
 func (f *Tee) copyRequest(req *http.Request, u *url.URL) *http.Request {
