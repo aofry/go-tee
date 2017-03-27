@@ -16,7 +16,7 @@ tee:
     ports:
         - 8080:8080
 debug-backend:
-    image: jihchi/alpine-iojs-echo-server
+    image: nginx
     container_name: debug
     ports:
         - 9095:80

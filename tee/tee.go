@@ -68,10 +68,11 @@ func (t *Tee) sendDebugRequest() {
 	request := <-t.requests
 
 	w := &DummyResponseWriter{}
-	//var pUrl *url.URL = &url.URL{}
-	//pUrl, _ = pUrl.Parse(t.debugUrl)
-	//newRequest := t.copyRequest(request, pUrl)
-	t.debugForward.ServeHTTP(w, request)
+	var pUrl *url.URL = &url.URL{}
+	pUrl, _ = pUrl.Parse(t.debugUrl)
+	log.Info("Going to copy request to: ", t.debugUrl)
+	newRequest := t.copyRequest(request, pUrl)
+	t.debugForward.ServeHTTP(w, newRequest)
 	log.Info("Sent request to debug backend")
 }
 
