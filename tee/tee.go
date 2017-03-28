@@ -28,7 +28,11 @@ func New(next http.Handler, opts ...Option) (*Tee, error) {
 	concurrentLimit := 1
 
 	requestsChan := make(chan *http.Request, concurrentLimit)
-	fw, _ := forward.New()
+	fw, err := forward.New()
+
+	if err != nil {
+		log.Error("could not build forwarder ", err)
+	}
 	//TODO add url for debug backend
 	t := &Tee{
 		next:         next,
@@ -69,9 +73,11 @@ func (t *Tee) sendDebugRequest() {
 
 	w := &DummyResponseWriter{}
 	var pUrl *url.URL = &url.URL{}
-	pUrl, _ = pUrl.Parse(t.debugUrl)
-	log.Info("Going to copy request to: ", t.debugUrl)
+	//pUrl, _ = pUrl.Parse(t.debugUrl)
+	pUrl, _ = pUrl.Parse(t.debugUrl + request.RequestURI)
+	log.Info("Going to copy request to: ", t.debugUrl+request.RequestURI)
 	newRequest := t.copyRequest(request, pUrl)
+	log.Debug(newRequest)
 	t.debugForward.ServeHTTP(w, newRequest)
 	log.Info("Sent request to debug backend")
 }
