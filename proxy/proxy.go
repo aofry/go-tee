@@ -11,7 +11,7 @@ import (
 )
 
 func New() {
-	proxyPort := util.Getenv("PORT", 8080)
+	proxyPort := util.Getenv("PORT", "8080")
 
 	proxy := http.HandlerFunc(ProxyHandler)
 	teeHandler, _ := goTee.New(proxy)

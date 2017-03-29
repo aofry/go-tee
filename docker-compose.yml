@@ -12,11 +12,11 @@ tee:
         - backend
     environment:
         - REAL_BACKEND=http://backend:80/
-        - DEBUG_BACKEND=http://debug-backend:80/
+        - DEBUG_BACKEND=http://debug-backend:8080/
     ports:
         - 8080:8080
 debug-backend:
-    image: nginx
+    build: ./tracer/
     container_name: debug
     ports:
-        - 9095:80
+        - 9095:8080
