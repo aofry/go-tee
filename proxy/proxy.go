@@ -2,6 +2,7 @@ package proxy
 
 import (
 	goTee "github.com/aofry/go-tee/tee"
+	"github.com/aofry/go-tee/util"
 	"github.com/vulcand/oxy/forward"
 	"github.com/vulcand/oxy/testutils"
 	"net/http"
@@ -10,11 +11,7 @@ import (
 )
 
 func New() {
-	proxyPort := os.Getenv("PORT")
-
-	if proxyPort == "" {
-		proxyPort = "8080"
-	}
+	proxyPort := util.Getenv("PORT", 8080)
 
 	proxy := http.HandlerFunc(ProxyHandler)
 	teeHandler, _ := goTee.New(proxy)
