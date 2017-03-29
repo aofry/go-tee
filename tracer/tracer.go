@@ -14,8 +14,8 @@ func main() {
 	log.Info("Starting")
 
 	doNothingHandler := http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
-		w.Header().Set("Content-Length", "5")
-		w.Write([]byte("hello"))
+		w.Header().Set("Content-Length", "2")
+		w.Write([]byte("OK"))
 	})
 
 	//buf := &bytes.Buffer{}
