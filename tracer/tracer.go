@@ -3,7 +3,6 @@ package main
 import (
 	log "github.com/Sirupsen/logrus"
 
-	"bytes"
 	"github.com/vulcand/oxy/trace"
 	"net/http"
 	"os"
@@ -19,8 +18,9 @@ func main() {
 		w.Write([]byte("hello"))
 	})
 
-	buf := &bytes.Buffer{}
-	tracer, err := trace.New(doNothingHandler, buf)
+	//buf := &bytes.Buffer{}
+
+	tracer, err := trace.New(doNothingHandler, log.StandardLogger().Out)
 
 	if err != nil {
 		log.Error("could not init tracer ", err)
