@@ -8,9 +8,9 @@ import (
 func main() {
 	log.SetLevel(log.InfoLevel)
 
-	log.Println("Starting")
+	log.Info("Starting")
 
 	proxy.New()
 
-	log.Println("Ending")
+	log.Info("Ending")
 }
