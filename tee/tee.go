@@ -77,7 +77,7 @@ func (t *Tee) sendDebugRequest() {
 	pUrl, _ = pUrl.Parse(t.debugUrl + request.RequestURI)
 	log.Info("Going to copy request to: ", t.debugUrl+request.RequestURI)
 	newRequest := t.copyRequest(request, pUrl)
-	log.Debug(newRequest)
+	log.Info(newRequest.Host)
 	t.debugForward.ServeHTTP(w, newRequest)
 	log.Info("Sent request to debug backend")
 }
@@ -89,6 +89,8 @@ func (f *Tee) copyRequest(req *http.Request, u *url.URL) *http.Request {
 	outReq.URL = utils.CopyURL(req.URL)
 	outReq.URL.Scheme = u.Scheme
 	outReq.URL.Host = u.Host
+	outReq.Host = u.Host
+	outReq.RequestURI = u.RequestURI()
 	outReq.URL.Opaque = req.RequestURI
 	// raw query is already included in RequestURI, so ignore it to avoid dupes
 	outReq.URL.RawQuery = ""
