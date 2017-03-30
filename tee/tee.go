@@ -6,7 +6,6 @@ import (
 	"github.com/vulcand/oxy/utils"
 	"io"
 	"net/http"
-	"net/url"
 	"os"
 )
 
@@ -18,7 +17,7 @@ type Tee struct {
 	writer       io.Writer
 	requests     chan *http.Request
 	debugForward *forward.Forwarder
-	debugUrl     string
+	debugHost    string
 }
 
 type Option func(*Tee) error
@@ -38,7 +37,7 @@ func New(next http.Handler, opts ...Option) (*Tee, error) {
 		next:         next,
 		requests:     requestsChan,
 		debugForward: fw,
-		debugUrl:     os.Getenv("DEBUG_BACKEND"),
+		debugHost:     os.Getenv("DEBUG_BACKEND"),
 	}
 	for _, o := range opts {
 		if err := o(t); err != nil {
@@ -72,25 +71,21 @@ func (t *Tee) sendDebugRequest() {
 	request := <-t.requests
 
 	w := &DummyResponseWriter{}
-	var pUrl *url.URL = &url.URL{}
-	//pUrl, _ = pUrl.Parse(t.debugUrl)
-	pUrl, _ = pUrl.Parse(t.debugUrl + request.RequestURI)
-	log.Info("Going to copy request to: ", t.debugUrl+request.RequestURI)
-	newRequest := t.copyRequest(request, pUrl)
+	//clone request so the original can be free to GC and debug is completly independent
+	newRequest := t.copyRequest(request, t.debugHost)
 	log.Info(newRequest.Host)
 	t.debugForward.ServeHTTP(w, newRequest)
 	log.Info("Sent request to debug backend")
 }
 
-func (f *Tee) copyRequest(req *http.Request, u *url.URL) *http.Request {
+func (f *Tee) copyRequest(req *http.Request, host string) *http.Request {
 	outReq := new(http.Request)
 	*outReq = *req // includes shallow copies of maps, but we handle this below
 
 	outReq.URL = utils.CopyURL(req.URL)
-	outReq.URL.Scheme = u.Scheme
-	outReq.URL.Host = u.Host
-	outReq.Host = u.Host
-	outReq.RequestURI = u.RequestURI()
+	outReq.URL.Host = host
+	outReq.Host = host
+	outReq.RequestURI = req.RequestURI
 	outReq.URL.Opaque = req.RequestURI
 	// raw query is already included in RequestURI, so ignore it to avoid dupes
 	outReq.URL.RawQuery = ""

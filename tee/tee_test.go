@@ -62,6 +62,3 @@ func TestNextHandlerWorks(t *testing.T) {
 	log.Debug(body)
 }
 
-func (ts *TeeSuite) TestCopyRequest(t *testing.T)  {
-	//res, _, err := testutils.MakeRequest(srv.URL+"/db1", testutils.Method("POST"), testutils.Body("123456"))
-}
