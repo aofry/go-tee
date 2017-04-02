@@ -6,7 +6,7 @@ import (
 	"github.com/vulcand/oxy/utils"
 	"io"
 	"net/http"
-	"os"
+	"github.com/aofry/go-tee/util"
 )
 
 type Tee struct {
@@ -37,7 +37,7 @@ func New(next http.Handler, opts ...Option) (*Tee, error) {
 		next:         next,
 		requests:     requestsChan,
 		debugForward: fw,
-		debugHost:     os.Getenv("DEBUG_BACKEND"),
+		debugHost:     util.GetenvNoDefault("DEBUG_BACKEND"),
 	}
 	for _, o := range opts {
 		if err := o(t); err != nil {

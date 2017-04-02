@@ -6,7 +6,6 @@ import (
 	"github.com/vulcand/oxy/forward"
 	"github.com/vulcand/oxy/testutils"
 	"net/http"
-	"os"
 	//	log "github.com/Sirupsen/logrus"
 )
 
@@ -25,7 +24,7 @@ func New() {
 }
 
 func ProxyHandler(w http.ResponseWriter, req *http.Request) {
-	service := os.Getenv("REAL_BACKEND")
+	service := util.GetenvNoDefault("REAL_BACKEND")
 
 	// let us forward this request to another server
 	req.URL = testutils.ParseURI(service)

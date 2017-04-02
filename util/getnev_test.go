@@ -1,11 +1,13 @@
 package util
 
-import "testing"
+import (
+	"testing"
+)
 
 var SOME_DEFAULT = "kdfnsdlkfj23523sdgdfh"
 
 func TestGetenvExist(t *testing.T) {
-	res := Getenv("HOME", SOME_DEFAULT)
+	res := Getenv("OS", SOME_DEFAULT)
 
 	if res == "" {
 		t.Error("Existing env var exist, should not return empty string")
@@ -27,7 +29,7 @@ func TestGetenvNotExistExpectDefault(t *testing.T) {
 }
 
 func TestGetenvNoDefault(t *testing.T) {
-	res := GetenvNoDefault("HOME")
+	res := GetenvNoDefault("OS")
 
 	if res == "" {
 		t.Error("Existing env var exist, should not return empty string")
