@@ -2,12 +2,16 @@ package util
 
 import (
 	"testing"
+	"os"
 )
 
 var SOME_DEFAULT = "kdfnsdlkfj23523sdgdfh"
+var dummyEnv = "SOME_DUMMY"
+var SOME_VAL = "aaasas"
 
 func TestGetenvExist(t *testing.T) {
-	res := Getenv("OS", SOME_DEFAULT)
+	os.Setenv(dummyEnv, SOME_VAL)
+	res := Getenv(dummyEnv, SOME_DEFAULT)
 
 	if res == "" {
 		t.Error("Existing env var exist, should not return empty string")
@@ -29,7 +33,8 @@ func TestGetenvNotExistExpectDefault(t *testing.T) {
 }
 
 func TestGetenvNoDefault(t *testing.T) {
-	res := GetenvNoDefault("OS")
+	os.Setenv(dummyEnv, SOME_VAL)
+	res := GetenvNoDefault(dummyEnv)
 
 	if res == "" {
 		t.Error("Existing env var exist, should not return empty string")
