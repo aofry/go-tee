@@ -12,6 +12,7 @@ install:
 
 
 script:
-  - go test github.com/aofry/go-tee
+  - go test -cover github.com/aofry/go-tee/util
+  - go test -cover github.com/aofry/go-tee/tee
   - docker build -t aofry/go-tee .
 
