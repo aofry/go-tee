@@ -9,10 +9,12 @@ services:
 install:
   - go get github.com/vulcand/oxy/forward
   - go get github.com/vulcand/oxy/testutils
+  - go get github.com/mattn/goveralls
 
 
 script:
   - go test -cover github.com/aofry/go-tee/util
   - go test -cover github.com/aofry/go-tee/tee
   - docker build -t aofry/go-tee .
+  - $HOME/gopath/bin/goveralls -service=travis-ci
 
