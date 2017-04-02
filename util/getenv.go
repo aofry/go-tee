@@ -1,7 +1,7 @@
 package util
 
 import (
-	"github.com/Sirupsen/logrus"
+	log "github.com/Sirupsen/logrus"
 	"os"
 )
 
@@ -16,7 +16,8 @@ func Getenv(key string, fallback string) string {
 func GetenvNoDefault(key string) string {
 	value := os.Getenv(key)
 	if len(value) == 0 {
-		logrus.Warn("Must provide env var: ", key)
+		log.Warn("Must provide env var: ", key)
+		return value
 	}
 	return value
 }

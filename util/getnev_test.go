@@ -34,10 +34,10 @@ func TestGetenvNoDefault(t *testing.T) {
 	}
 }
 
-//func TestGetenvNoDefaultWithNotExistingEnv(t *testing.T) {
-//	res := GetenvNoDefault(SOME_DEFAULT, SOME_DEFAULT)
-//
-//	if res != "" {
-//		t.Error("Env var does not exist, should return empty string")
-//	}
-//}
+func TestGetenvNoDefaultWithNotExistingEnv(t *testing.T) {
+	res := GetenvNoDefault(SOME_DEFAULT)
+
+	if res != "" {
+		t.Error("Env var does not exist, should return empty string")
+	}
+}
