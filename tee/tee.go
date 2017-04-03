@@ -2,11 +2,11 @@ package proxy
 
 import (
 	log "github.com/Sirupsen/logrus"
+	"github.com/aofry/go-tee/util"
 	"github.com/vulcand/oxy/forward"
 	"github.com/vulcand/oxy/utils"
 	"io"
 	"net/http"
-	"github.com/aofry/go-tee/util"
 )
 
 type Tee struct {
@@ -22,28 +22,23 @@ type Tee struct {
 
 type Option func(*Tee) error
 
-func New(next http.Handler, opts ...Option) (*Tee, error) {
+func New(next http.Handler) (*Tee, error) {
 	//TODO add external param for concurrent limit
 	concurrentLimit := 1
 
 	requestsChan := make(chan *http.Request, concurrentLimit)
-	fw, err := forward.New()
 
-	if err != nil {
-		log.Error("could not build forwarder ", err)
-	}
+	//not sending setters so no errors expected
+	fw, _ := forward.New()
+
 	//TODO add url for debug backend
 	t := &Tee{
 		next:         next,
 		requests:     requestsChan,
 		debugForward: fw,
-		debugHost:     util.GetenvNoDefault("DEBUG_BACKEND"),
+		debugHost:    util.GetenvNoDefault("DEBUG_BACKEND"),
 	}
-	for _, o := range opts {
-		if err := o(t); err != nil {
-			return nil, err
-		}
-	}
+
 	if t.errHandler == nil {
 		t.errHandler = utils.DefaultHandler
 	}

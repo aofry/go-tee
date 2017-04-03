@@ -2,7 +2,6 @@ package proxy
 
 import (
 	"net/http"
-	//log "github.com/Sirupsen/logrus"
 )
 
 type DummyResponseWriter struct {

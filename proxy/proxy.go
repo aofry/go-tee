@@ -6,7 +6,6 @@ import (
 	"github.com/vulcand/oxy/forward"
 	"github.com/vulcand/oxy/testutils"
 	"net/http"
-	//	log "github.com/Sirupsen/logrus"
 )
 
 func New() {
@@ -34,7 +33,3 @@ func ProxyHandler(w http.ResponseWriter, req *http.Request) {
 
 	fwd.ServeHTTP(w, req)
 }
-
-//func TeeHandler(w http.ResponseWriter, req *http.Request) {
-//
-//}
