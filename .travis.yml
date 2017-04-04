@@ -18,3 +18,8 @@ script:
   - docker build -t aofry/go-tee .
   - $HOME/gopath/bin/goveralls -service=travis-ci
 
+after_success:
+  - if [ "$TRAVIS_BRANCH" == "cleanup" ]; then
+    docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
+    docker push USER/REPO;
+    fi
