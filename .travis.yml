@@ -15,14 +15,15 @@ install:
 script:
   - go test -cover github.com/aofry/go-tee/util
   - go test -cover github.com/aofry/go-tee/tee
-  - docker build -t $TRAVIS_REPO_SLUG:$COMMIT .
+  - echo $TRAVIS_REPO_SLUG:$TRAVIS_COMMIT
+  - docker build -t $TRAVIS_REPO_SLUG:$TRAVIS_COMMIT .
   - $HOME/gopath/bin/goveralls -service=travis-ci
 
 after_success:
   - export TAG=`if [ "$TRAVIS_BRANCH" == "master" ]; then echo "latest"; else echo $TRAVIS_BRANCH ; fi`
   - if [ -z "$TAG" ]; then
     docker login -u=$DOCKER_USERNAME -p=$DOCKER_PASSWORD;
-    docker tag $TRAVIS_REPO_SLUG:$COMMIT $TRAVIS_REPO_SLUG:$TAG;
+    docker tag $TRAVIS_REPO_SLUG:$TRAVIS_COMMIT $TRAVIS_REPO_SLUG:$TAG;
     docker push $TRAVIS_REPO_SLUG;
     fi
 
