@@ -20,4 +20,4 @@ script:
 
 after_success:
   - docker login -u=$DOCKER_USERNAME -p=$DOCKER_PASSWORD
-  - docker push USER/REPO
+  - docker push $USER/$REPO
