@@ -8,10 +8,17 @@ import (
 	"net/http"
 )
 
-func New() {
+type Proxy struct {
+}
+
+func New() *Proxy {
 	proxyPort := util.Getenv("PORT", "8080")
 
-	proxy := http.HandlerFunc(ProxyHandler)
+	p := &Proxy{}
+
+	//proxt for real backend
+	proxy := http.HandlerFunc(p.ProxyHandler)
+	//tee for debug system
 	teeHandler, _ := goTee.New(proxy)
 
 	// that's it! our reverse proxy is ready!
@@ -20,9 +27,11 @@ func New() {
 		Handler: teeHandler,
 	}
 	s.ListenAndServe()
+
+	return p
 }
 
-func ProxyHandler(w http.ResponseWriter, req *http.Request) {
+func (t *Proxy) ProxyHandler(w http.ResponseWriter, req *http.Request) {
 	service := util.GetenvNoDefault("REAL_BACKEND")
 
 	// let us forward this request to another server
