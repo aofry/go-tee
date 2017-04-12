@@ -1,8 +1,8 @@
 package util
 
 import (
-	"testing"
 	"os"
+	"testing"
 )
 
 var SOME_DEFAULT = "kdfnsdlkfj23523sdgdfh"
