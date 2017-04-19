@@ -13,11 +13,11 @@ install:
 
 
 script:
-  - go test -cover github.com/aofry/go-tee/util
-  - go test -cover github.com/aofry/go-tee/tee
+  - go test -cover github.com/aofry/go-tee/util -coverprofile=gover.coverprofile
+  - go test -cover github.com/aofry/go-tee/tee -coverprofile=gover.coverprofile
   - echo travis_repo_slag-$TRAVIS_REPO_SLUG:$TRAVIS_COMMIT
   - docker build -t $TRAVIS_REPO_SLUG:$TRAVIS_COMMIT .
-  - $HOME/gopath/bin/goveralls -service=travis-ci
+  - $HOME/gopath/bin/goveralls -service=travis-ci -coverprofile=gover.coverprofile
 
 after_success:
   - export TAG=`if [ "$TRAVIS_BRANCH" == "master" ]; then echo "latest"; else echo $TRAVIS_BRANCH ; fi`
