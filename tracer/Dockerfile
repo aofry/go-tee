@@ -1,4 +1,4 @@
-FROM golang:1.8.0
+FROM golang:1.8.1
 
 COPY . /go/src/github.com/aofry/go-tee/tracer
 RUN go get github.com/vulcand/oxy/trace

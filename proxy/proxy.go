@@ -16,8 +16,8 @@ func New() *Proxy {
 
 	p := &Proxy{}
 
-	//proxt for real backend
-	proxy := http.HandlerFunc(p.ProxyHandler)
+	//proxy for real backend
+	proxy := http.HandlerFunc(ProxyHandler)
 	//tee for debug system
 	teeHandler, _ := goTee.New(proxy)
 
@@ -31,7 +31,7 @@ func New() *Proxy {
 	return p
 }
 
-func (t *Proxy) ProxyHandler(w http.ResponseWriter, req *http.Request) {
+func ProxyHandler(w http.ResponseWriter, req *http.Request) {
 	service := util.GetenvNoDefault("REAL_BACKEND")
 
 	// let us forward this request to another server

@@ -31,7 +31,6 @@ func New(next http.Handler) (*Tee, error) {
 	//not sending setters so no errors expected
 	fw, _ := forward.New()
 
-	//TODO add url for debug backend
 	t := &Tee{
 		next:         next,
 		requests:     requestsChan,
@@ -57,9 +56,9 @@ func (t *Tee) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 	//limit the actual requests that are going out
 	if len(t.requests) < cap(t.requests) {
 		t.requests <- req
+		go t.sendDebugRequest()
 	}
 
-	go t.sendDebugRequest()
 }
 
 func (t *Tee) sendDebugRequest() {
