@@ -4,6 +4,7 @@ import (
 	log "github.com/Sirupsen/logrus"
 	"github.com/aofry/go-tee/util"
 	"github.com/vulcand/oxy/forward"
+	"github.com/vulcand/oxy/testutils"
 	"github.com/vulcand/oxy/utils"
 	"io"
 	"net/http"
@@ -66,9 +67,10 @@ func (t *Tee) sendDebugRequest() {
 
 	w := &DummyResponseWriter{}
 	//clone request so the original can be free to GC and debug is completly independent
-	newRequest := t.copyRequest(request, t.debugHost)
-	log.Info(newRequest.Host)
-	t.debugForward.ServeHTTP(w, newRequest)
+	//newRequest := t.copyRequest(request, t.debugHost)
+	//log.Info(newRequest.Host)
+	request.URL = testutils.ParseURI(t.debugHost)
+	t.debugForward.ServeHTTP(w, request)
 	log.Info("Sent request to debug backend")
 }
 

@@ -6,7 +6,7 @@ import (
 )
 
 func main() {
-	log.SetLevel(log.InfoLevel)
+	log.SetLevel(log.DebugLevel)
 
 	log.Info("Starting")
 
