@@ -74,7 +74,7 @@ func (t *Tee) sendDebugRequest() {
 
 func (f *Tee) copyRequest(req *http.Request, host string) *http.Request {
 	outReq := new(http.Request)
-	*outReq = *req // includes shallow copies of maps, but we handle this below
+	//*outReq = *req // includes shallow copies of maps, but we handle this below
 
 	outReq.URL = utils.CopyURL(req.URL)
 	outReq.URL.Host = host
