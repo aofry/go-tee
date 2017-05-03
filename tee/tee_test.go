@@ -60,3 +60,5 @@ func TestNextHandlerWorks(t *testing.T) {
 	body, err := ioutil.ReadAll(res.Body)
 	log.Debug("body", body)
 }
+
+//TODO add test for copy request and that it contain another request object with validation to some fields

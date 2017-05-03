@@ -10,13 +10,14 @@ tee:
     build: ./
     links:
         - backend
+        - tracer
     environment:
         - REAL_BACKEND=http://backend:80/
-        - DEBUG_BACKEND=debug-backend:8080
+        - DEBUG_BACKEND=tracer:8080
     ports:
         - 8082:8080
-debug-backend:
+tracer:
     build: ./tracer/
-    container_name: debug
+    container_name: tracer
     ports:
         - 9095:8080
